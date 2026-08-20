@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailOptix AI</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header p {
+            margin: 5px 0 0;
+        }
+
+        .container {
+            padding: 30px 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #17365d;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0f2744;
+        }
+
+        .train-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .train-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .train-card h2 {
+            margin-top: 0;
+            color: #17365d;
+        }
+
+        .status {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .running {
+            color: green;
+        }
+
+        .on-time {
+            color: #1683c5;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚆 RailOptix AI</h1>
+    <p>AI-Powered Railway Traffic Dashboard</p>
+</header>
+
+<div class="container">
+
+    <div class="top-bar">
+        <h2>Live Train Information</h2>
+        <button onclick="loadTrains()">🔄 Refresh</button>
+    </div>
+
+    <div id="trainContainer" class="train-container">
+        Loading trains...
+    </div>
+
+</div>
+
+<script>
+
+async function loadTrains() {
+
+    const container = document.getElementById("trainContainer");
+
+    container.innerHTML = "Loading trains...";
+
+    try {
+
+        const response = await fetch("/api/trains");
+
+        const trains = await response.json();
+
+        container.innerHTML = "";
+
+        trains.forEach(train => {
+
+            const card = document.createElement("div");
+
+            card.className = "train-card";
+
+            const status = train.status.trim();
+
+            card.innerHTML = `
+                <h2>🚆 ${train.train_name}</h2>
+
+                <p><strong>Train Number:</strong>
+                    ${train.train_number}
+                </p>
+
+                <p><strong>Route:</strong>
+                    ${train.source} → ${train.destination}
+                </p>
+
+                <p><strong>Current Station:</strong>
+                    📍 ${train.current_station}
+                </p>
+
+                <p><strong>Departure:</strong>
+                    🕐 ${train.scheduled_departure}
+                </p>
+
+                <p><strong>Arrival:</strong>
+                    🕐 ${train.scheduled_arrival}
+                </p>
+
+                <p class="status ${
+                    status.toLowerCase() === "running"
+                    ? "running"
+                    : "on-time"
+                }">
+                    Status: ${status}
+                </p>
+            `;
+
+            container.appendChild(card);
+
+        });
+
+    } catch (error) {
+
+        container.innerHTML =
+            '<p class="error">Unable to connect to the railway server.</p>';
+
+        console.error(error);
+    }
+}
+
+loadTrains();
+
+</script>
+
+</body>
+</html>

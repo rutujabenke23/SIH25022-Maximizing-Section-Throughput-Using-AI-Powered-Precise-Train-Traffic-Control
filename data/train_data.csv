@@ -1,0 +1,5 @@
+train_number,train_name,source,destination,scheduled_departure,scheduled_arrival,current_station,status
+12110,Panchavati Express,Mumbai CSMT,Manmad,18:15,23:20,Nashik Road,Running
+11025,Bhusaval Express,Pune,Jalgaon,06:00,13:30,Ahmednagar,Running
+12109,Panchavati Express,Manmad,Mumbai CSMT,05:45,10:50,Manmad,On Time
+11010,Sinhagad Express,Pune,Mumbai CSMT,09:10,12:25,Lonavala,Running
