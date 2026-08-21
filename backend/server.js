@@ -1,10 +1,12 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
 
 // Allow frontend to communicate with backend
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
 
